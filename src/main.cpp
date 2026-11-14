@@ -1,4 +1,5 @@
-
+#include "Map.h"
+#include "Algoritm.h"
 #include <Arduino.h>
 #include <unordered_map>
 #include <string>
@@ -31,7 +32,6 @@ unordered_map<string, int> people = {
     {"D", 5}
 };
 
-
 int getAmountOfPeople();
 void updateNodeDirection();
 void updateDirectionOnNode(int coorx, int coory, int newDir);
@@ -42,6 +42,8 @@ void setup() {
     Serial.begin(115200);
 
     delay(1000);
+
+    setupMap();
 }
 
 
