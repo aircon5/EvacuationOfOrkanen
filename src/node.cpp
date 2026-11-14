@@ -30,19 +30,19 @@ room rooms [4] = {
     {"A333", 55, false, false}
 };
 
-std::unordered_map<int, String> locations =
+std::unordered_map<int16_t, String> locations =
 {
-    {044082, "dörrA330"},
-    {055062, "korridorMotTrappaVänster"},
+    {44082, "dörrA330"},
+    {55062, "korridorMotTrappaVänster"},
     {100079, "dörrA331"},
     {160061, "korridorMotTrappaHöger"},
-    {099071, "framförA331"},
+    {99071, "framförA331"},
     {128070, "framförA332"},
     {741006, "dörrMellanA330oA331"},
     {153070, "framförA333"},
-    {058080, "korridor"},
-    {025060, "vån2TrappaVänster"},
-    {043060, "vån3TrappaVänster"},
+    {58080, "korridor"},
+    {25060, "vån2TrappaVänster"},
+    {43060, "vån3TrappaVänster"},
     {178054, "vån3TrappaHöger"},
     {199066, "vån2TrappaHöger"},
     {128078, "dörrA332"},
@@ -55,8 +55,7 @@ String setupNode(int x, int y)
 {
     xcoord = x;
     ycoord = y;
-    String combined = String(xcoord) + String(ycoord);
-    int xy = combined.toInt();
+    int xy = x * 1000 + y;
     auto it = locations.find(xy);
 
     if (it != locations.end()) {
