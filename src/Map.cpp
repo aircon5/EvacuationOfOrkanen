@@ -1,7 +1,7 @@
 #include "Map.h"
 #include <Arduino.h>    
 
-Patch map[mapHeight][mapWidth];
+Patch mapOfOrkanen[mapHeight][mapWidth];
 
 bool validCoord(int x, int y) {
     if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight) {
@@ -13,22 +13,22 @@ bool validCoord(int x, int y) {
 
 void setTile(int x, int y, TileType type) {
     if (validCoord(x, y)) {
-        map[y][x].tileType = type;
+        mapOfOrkanen[y][x].tileType = type;
     }
 }
 
 void setCheckpoint(int x, int y, CheckpointType checkpoint) {
     if (validCoord(x, y)) {
-        map[y][x].checkpoint = checkpoint;
+        mapOfOrkanen[y][x].checkpoint = checkpoint;
     }
 }
 
 void setupWorld() {
     for (int x = 0; x < mapWidth; x++) {
         for (int y = 0; y < mapHeight; y++) {
-            map[y][x].tileType = FLOOR;
-            map[y][x].checkpoint = NO_CHECKPOINT;
-            map[y][x].doorFlag = NO_DOOR;
+            mapOfOrkanen[y][x].tileType = FLOOR;
+            mapOfOrkanen[y][x].checkpoint = NO_CHECKPOINT;
+            mapOfOrkanen[y][x].doorFlag = NO_DOOR;
         }
     }
 }
@@ -47,28 +47,28 @@ void setupRoomsAndCorridors() {
     //Rum A 
     for (int x = 40; x <= 73; x++) {
         for (int y = 82; y <= 110; y++) {
-           map[y][x].tileType = ROOM;
+           mapOfOrkanen[y][x].tileType = ROOM;
         }
     }
 
      //Rum B
     for (int x = 76; x <= 105; x++) {
         for (int y = 82; y <= 110; y++) {
-           map[y][x].tileType = ROOM;
+           mapOfOrkanen[y][x].tileType = ROOM;
         }
     }
     
     //Rum C
     for (int x = 107; x <= 140; x++) {
         for (int y = 78; y <= 110; y++) {
-           map[y][x].tileType = ROOM;
+           mapOfOrkanen[y][x].tileType = ROOM;
         }
     }
 
     //Rum D
     for (int x = 142; x <= 166; x++) {
         for (int y = 78; y <= 110; y++) {
-           map[y][x].tileType = ROOM;
+           mapOfOrkanen[y][x].tileType = ROOM;
         }
     }
 
@@ -79,75 +79,74 @@ void setupDoors() {
     //Gemensam labb dörr
      for (int x = 74; x <= 75; x++) {
         for (int y = 105; y <= 108; y++) {
-           map[y][x].checkpoint = GEM_LABB_DOOR;
-           map[y][x].doorFlag = DOOR_OPEN;
+           mapOfOrkanen[y][x].checkpoint = GEM_LABB_DOOR;
+           mapOfOrkanen[y][x].doorFlag = DOOR_OPEN;
         }
     }
 
     //Labb A dörr
      for (int x = 41; x <= 46; x++) {
-           map[81][x].checkpoint = LABB_A_MAIN;
-           map[81][x].doorFlag = DOOR_OPEN;
+           mapOfOrkanen[81][x].doorFlag = DOOR_OPEN;
         }
 
     //Labb B dörr
     for (int x = 97; x <= 103; x++) {
-           map[78][x].checkpoint = LABB_B_MAIN;
-           map[78][x].doorFlag = DOOR_OPEN;
+           mapOfOrkanen[78][x].checkpoint = LABB_B_MAIN;
+           mapOfOrkanen[78][x].doorFlag = DOOR_OPEN;
     }
 
     // SalCexit
     for (int x = 127; x <= 132; x++) {
-        map[77][x].checkpoint = SAL_C_EXIT;
-        map[77][x].doorFlag = DOOR_OPEN;
+        mapOfOrkanen[77][x].checkpoint = SAL_C_EXIT;
+        mapOfOrkanen[77][x].doorFlag = DOOR_OPEN;
     }
 
     // SalDihxit
     for (int x = 153; x <= 158; x++) {
-        map[77][x].checkpoint = SAL_DIH_EXIT;
-        map[77][x].doorFlag = DOOR_OPEN;
+        mapOfOrkanen[77][x].checkpoint = SAL_DIH_EXIT;
+        mapOfOrkanen[77][x].doorFlag = DOOR_OPEN;
     }
 
     // VänsterMittNer
     for (int x = 51; x <= 59; x++) {
-        map[61][x].checkpoint = LEFT_MIDDLE_DOWN;
-        map[61][x].doorFlag = DOOR_OPEN;
+        mapOfOrkanen[61][x].checkpoint = LEFT_MIDDLE_DOWN;
+        mapOfOrkanen[61][x].doorFlag = DOOR_OPEN;
     }
 
     // VänsterMittHöger
     for (int y = 75; y <= 80; y++) {
-        map[y][60].checkpoint = LEFT_MIDDLE_RIGHT;
-        map[y][60].doorFlag = NO_DOOR;
+        mapOfOrkanen[y][60].checkpoint = LEFT_MIDDLE_RIGHT;
+        mapOfOrkanen[y][60].doorFlag = NO_DOOR;
     }
 
     // HögerMittNer
     for (int x = 156; x <= 163; x++) {
-        map[61][x].checkpoint = RIGHT_MIDDLE_DOWN;
-        map[61][x].doorFlag = DOOR_OPEN;
+        mapOfOrkanen[61][x].checkpoint = RIGHT_MIDDLE_DOWN;
+        mapOfOrkanen[61][x].doorFlag = DOOR_OPEN;
     }
 
     // MittenVänster
     for (int y = 70; y <= 77; y++) {
-        map[y][96].checkpoint = MIDDLE_LEFT;
-        map[y][96].doorFlag = NO_DOOR;
+        mapOfOrkanen[y][96].checkpoint = MIDDLE_LEFT;
+        mapOfOrkanen[y][96].doorFlag = NO_DOOR;
     }
 
     // VänsterTrappa
     for (int x = 45; x <= 49; x++) {
-        map[42][x].checkpoint = LEFT_STAIRS;
-        map[42][x].doorFlag = NO_DOOR;
+        mapOfOrkanen[42][x].checkpoint = LEFT_STAIRS;
+        mapOfOrkanen[42][x].doorFlag = NO_DOOR;
     }
 
     // VänsterKorridorUpp
     for (int x = 51; x <= 59; x++) {
-        map[42][x].checkpoint = LEFT_CORRIDOR_UP;
-        map[42][x].doorFlag = NO_DOOR;
+        mapOfOrkanen[42][x].checkpoint = LEFT_CORRIDOR_UP;
+        mapOfOrkanen[42][x].doorFlag = NO_DOOR;
     }
 
     // HögerTrappa
     for (int y = 49; y <= 53; y++) {
-        map[y][164].checkpoint = RIGHT_STAIRS;
-        map[y][164].doorFlag = NO_DOOR;
+        mapOfOrkanen[y][164].checkpoint = RIGHT_STAIRS;
+        mapOfOrkanen[y][164].doorFlag = NO_DOOR;
     }
 
 }
@@ -360,9 +359,9 @@ void blockDoor(CheckpointType checkpt) {
 
         for (int y = 0; y < mapHeight; y++) {
 
-            if (map[y][x].checkpoint == checkpt) {
+            if (mapOfOrkanen[y][x].checkpoint == checkpt) {
 
-                map[y][x].doorFlag = DOOR_CLOSED;
+                mapOfOrkanen[y][x].doorFlag = DOOR_CLOSED;
             }
         }
     }
@@ -374,16 +373,16 @@ void openDoor(CheckpointType checkpt) {
 
         for (int y = 0; y < mapHeight; y++) {
 
-            if (map[y][x].checkpoint == checkpt) {
+            if (mapOfOrkanen[y][x].checkpoint == checkpt) {
 
-                map[y][x].doorFlag = DOOR_OPEN;
+                mapOfOrkanen[y][x].doorFlag = DOOR_OPEN;
             }
         }
     }
 }
 
 bool isBlocked(int x, int y) {
-    if (!validCoord(x, y) or map[y][x].tileType == WALL or map[y][x].doorFlag == DOOR_CLOSED) {
+    if (!validCoord(x, y) or mapOfOrkanen[y][x].tileType == WALL or mapOfOrkanen[y][x].doorFlag == DOOR_CLOSED) {
         return true;
     }
     return false;

@@ -46,7 +46,7 @@ struct Patch {
     uint8_t doorFlag;
 }; 
 
-extern Patch map[mapHeight][mapWidth]; // mapHeight är y koordinaten och är mindre än x vilket betyder mindre minne används.
+extern Patch mapOfOrkanen[mapHeight][mapWidth]; // mapHeight är y koordinaten och är mindre än x vilket betyder mindre minne används.
 
 //Skapar hela världen med default värden för varje tile/patch
 void setupWorld();
