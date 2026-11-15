@@ -23,6 +23,8 @@ int totalPeople = 0;
 bool manyPeople = false;
 std::vector<String> freeToGo;
 
+std::vector<NearbyCheckpt> nearbyCheckpts;
+
 
 room rooms [4] = {
     {"A330", 0, false, false},
@@ -61,6 +63,8 @@ String setupNode(int x, int y)
     int xy = x * 1000 + y;
     auto it = locations.find(xy);
 
+    setupCheckpt(xy);
+
     if (it != locations.end()) {
         locationInBuiling = it->second;
         if (locationInBuiling.indexOf("A33") != -1) {atRoom = true;}
@@ -68,6 +72,116 @@ String setupNode(int x, int y)
         locationInBuiling = "Okänd plats";
     }
     return locationInBuiling;
+}
+
+void setupCheckpt(int ID) {
+
+    nearbyCheckpts.clear();
+
+    switch (ID)
+    {
+    case 44082:
+        nearbyCheckpts = {
+            {GEM_LABB_DOOR, "N"},
+            {A330_OUTSIDE_DOWN, "S"},
+            {A330_OUTSIDE_RIGHT, "S"}
+        };
+        break;
+
+    case 55062:
+        nearbyCheckpts = {
+            {LABB_A330, "N"},
+            {A330_OUTSIDE_RIGHT, "N"},
+            {LEFT_CORRIDOR_DOWN, "S"}
+        };
+        break;
+
+    case 100079:
+        nearbyCheckpts = {
+            {GEM_LABB_DOOR, "N"},
+            {A333_DOWN, "S"},
+            {A331_OUTISDE_LEFT, "W"}
+        };
+        break;
+
+    case 50035:
+        nearbyCheckpts = {
+            {LEFT_STAIRS, "N"}, //Den här borde egentligen vara NW
+            {LEFT_CORRIDOR_DOWN, "N"}
+        };
+        break;
+
+    case 160061:
+        nearbyCheckpts = {
+            {LABB_A331, "N"},
+            {A331_OUTISDE_LEFT, "N"},
+            {RIGHT_STAIRS, "S"}
+        };
+        break;
+
+    case 158053:
+        nearbyCheckpts = {
+            {A333_DOWN, "S"},
+            {RIGHT_STAIRS, "E"}
+        };
+        break;
+
+    case 99071:
+        nearbyCheckpts = {
+            {LABB_A331, "S"},
+            {A331_OUTISDE_LEFT, "W"},
+            {A333_DOWN, "E"}
+        };
+        break;
+
+    case 128070:
+        nearbyCheckpts = {
+            {LABB_A331, "W"},
+            {A331_OUTISDE_LEFT, "W"},
+            {A333_DOWN, "E"}
+        };
+        break;
+
+    case 74106:
+        nearbyCheckpts = {
+            {LABB_A330, "W"}, //SW
+            {LABB_A331, "E"}, //SE
+        };
+        break;
+    
+    case 153070:
+        nearbyCheckpts = {
+            {LABB_A331, "W"},
+            {A331_OUTISDE_LEFT, "W"},
+            {A333_DOWN, "E"}
+        };
+        break;
+
+    case 58080:
+        nearbyCheckpts = {
+            {A330_OUTSIDE_DOWN, "S"},
+            {LABB_A330, "S"},
+            {A331_OUTISDE_LEFT, "E"}
+        };
+        break;
+
+    default:
+        Serial.print("Dessa koordinater/ID finns inte");
+        break;
+    }
+    
+
+}
+
+String getCheckptDirection(CheckpointType checkpoint) {
+
+    for (int i = 0; i < nearbyCheckpts.size(); i++) {
+
+        if (nearbyCheckpts[i].checkpt == checkpoint) {
+            return nearbyCheckpts[i].direction;
+        }
+    }
+    return "Checkpoint has not been given to node";
 }
 
 void updateNodeDirection()
