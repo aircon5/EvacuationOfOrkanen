@@ -1,5 +1,5 @@
-#ifndef ALGORTIM_H
-#define ALGORTIM_H
+#ifndef ALGORITM_H
+#define ALGORITM_H
 
 #include <Arduino.h>
 #include <vector>
