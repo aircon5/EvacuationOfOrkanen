@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 //setup node
 //kolla om det är mycket personer, för då ska den inte köra a*, fast bara ifall den är vid dörrarna
@@ -46,7 +47,9 @@ std::unordered_map<int16_t, String> locations =
     {178054, "vån3TrappaHöger"},
     {199066, "vån2TrappaHöger"},
     {128078, "dörrA332"},
-    {153078, "dörrA333"}
+    {153078, "dörrA333"},
+    {158053, "vänsterTrappa"},
+    {500053, "högerTrappa"}
 };
 
 
