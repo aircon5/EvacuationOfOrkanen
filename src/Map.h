@@ -20,17 +20,17 @@ enum TileType : uint8_t {
 enum CheckpointType : uint8_t {
     NO_CHECKPOINT, // Tror inte denna behövs
     GEM_LABB_DOOR,
-    LABB_A_MAIN,
-    LABB_B_MAIN,
-    SAL_C_EXIT,
-    SAL_DIH_EXIT,
-    LEFT_MIDDLE_DOWN,
-    LEFT_MIDDLE_RIGHT,
-    RIGHT_MIDDLE_DOWN,
-    MIDDLE_LEFT,
+    LABB_A330,
+    LABB_A331,
+    SAL_A332,
+    SAL_A333,
+    A330_OUTSIDE_DOWN,
+    A330_OUTSIDE_RIGHT,
+    A333_DOWN,
+    A331_OUTISDE_LEFT,
     LEFT_STAIRS,
     RIGHT_STAIRS,
-    LEFT_CORRIDOR_UP
+    LEFT_CORRIDOR_DOWN
 };
 
 //Doorflag, dörr status eller bara inte en dörr
