@@ -85,6 +85,57 @@ void updateNodeDirection()
 }
 
 
+void checkRooms()
+{
+    int antalA = rooms[0].amountPeople; // A330
+    int antalB = rooms[1].amountPeople; // A331
+    int antalC = rooms[2].amountPeople; // A332
+    int antalD = rooms[3].amountPeople; // A333
+
+    // Om skillnaden mellan vänster och höger sida är mindre än 10
+    if (abs((antalA + antalB) - (antalC + antalD)) < 10)
+    {
+        Serial.println("Normalt");
+        // NORMALT LÄGE
+        // Här ska du senare lägga in:
+        // - Hitta alla noder med priority == true
+        // - Kör A* för varje sådan nod
+        // - Uppdatera nodens riktning
+        // - Sätt priority = false
+    }
+    else
+    {
+        if (antalA > (antalB + 20))
+        {
+            if (locationInBuiling.indexOf("A331") != -1) 
+            {
+                Serial.println("de i A331 går till höger");
+                direction = 'E'; //höger
+            }
+            else 
+            {
+                Serial.println("Inte rätt rum (1)");
+            }
+        }
+        else
+        {
+            if (antalD > (antalC + 10))
+            {
+                Serial.println("de i A332 går till vänster");
+                if (locationInBuiling.indexOf("A332") != -1) 
+                {
+                    direction = 'W'; //vänster
+                }
+                else 
+                {
+                    Serial.println("Inte rätt rum (2)");
+                }
+            }
+        }
+    }
+}
+
+
 void checkPeopleInRooms(String nodeStartedHere)
 {
     freeToGo.clear();
@@ -138,56 +189,6 @@ void checkPeopleInRooms(String nodeStartedHere)
 
         if (rightRoom < 4) {
             freeToGo.push_back(rooms[rightRoom].roomName);
-        }
-    }
-}
-
-void checkRooms()
-{
-    int antalA = rooms[0].amountPeople; // A330
-    int antalB = rooms[1].amountPeople; // A331
-    int antalC = rooms[2].amountPeople; // A332
-    int antalD = rooms[3].amountPeople; // A333
-
-    // Om skillnaden mellan vänster och höger sida är mindre än 10
-    if (abs((antalA + antalB) - (antalC + antalD)) < 10)
-    {
-        Serial.println("Normalt");
-        // NORMALT LÄGE
-        // Här ska du senare lägga in:
-        // - Hitta alla noder med priority == true
-        // - Kör A* för varje sådan nod
-        // - Uppdatera nodens riktning
-        // - Sätt priority = false
-    }
-    else
-    {
-        if (antalA > (antalB + 20))
-        {
-            if (locationInBuiling.indexOf("A331") != -1) 
-            {
-                Serial.println("de i A331 går till höger");
-                direction = 'E'; //höger
-            }
-            else 
-            {
-                Serial.println("Inte rätt rum (1)");
-            }
-        }
-        else
-        {
-            if (antalD > (antalC + 10))
-            {
-                Serial.println("de i A332 går till vänster");
-                if (locationInBuiling.indexOf("A332") != -1) 
-                {
-                    direction = 'W'; //vänster
-                }
-                else 
-                {
-                    Serial.println("Inte rätt rum (2)");
-                }
-            }
         }
     }
 }

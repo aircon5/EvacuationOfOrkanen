@@ -23,7 +23,8 @@ extern room rooms[4];
 
 String setupNode(int x, int y); //constructor
 void updateNodeDirection();
-void checkPeopleInRooms(String nodeStartedHere);
 void checkRooms();
+void checkPeopleInRooms(String nodeStartedHere);
+
 
 #endif
