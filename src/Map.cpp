@@ -91,43 +91,43 @@ void setupDoors() {
 
     //Labb B dörr
     for (int x = 97; x <= 103; x++) {
-           mapOfOrkanen[78][x].checkpoint = LABB_B_MAIN;
+           mapOfOrkanen[78][x].checkpoint = LABB_A331;
            mapOfOrkanen[78][x].doorFlag = DOOR_OPEN;
     }
 
     // SalCexit
     for (int x = 127; x <= 132; x++) {
-        mapOfOrkanen[77][x].checkpoint = SAL_C_EXIT;
+        mapOfOrkanen[77][x].checkpoint = SAL_A332;
         mapOfOrkanen[77][x].doorFlag = DOOR_OPEN;
     }
 
     // SalDihxit
     for (int x = 153; x <= 158; x++) {
-        mapOfOrkanen[77][x].checkpoint = SAL_DIH_EXIT;
+        mapOfOrkanen[77][x].checkpoint = SAL_A333;
         mapOfOrkanen[77][x].doorFlag = DOOR_OPEN;
     }
 
     // VänsterMittNer
     for (int x = 51; x <= 59; x++) {
-        mapOfOrkanen[61][x].checkpoint = LEFT_MIDDLE_DOWN;
+        mapOfOrkanen[61][x].checkpoint = A330_OUTSIDE_DOWN;
         mapOfOrkanen[61][x].doorFlag = DOOR_OPEN;
     }
 
     // VänsterMittHöger
     for (int y = 75; y <= 80; y++) {
-        mapOfOrkanen[y][60].checkpoint = LEFT_MIDDLE_RIGHT;
+        mapOfOrkanen[y][60].checkpoint = A330_OUTSIDE_RIGHT;
         mapOfOrkanen[y][60].doorFlag = NO_DOOR;
     }
 
     // HögerMittNer
     for (int x = 156; x <= 163; x++) {
-        mapOfOrkanen[61][x].checkpoint = RIGHT_MIDDLE_DOWN;
+        mapOfOrkanen[61][x].checkpoint = A333_DOWN;
         mapOfOrkanen[61][x].doorFlag = DOOR_OPEN;
     }
 
     // MittenVänster
     for (int y = 70; y <= 77; y++) {
-        mapOfOrkanen[y][96].checkpoint = MIDDLE_LEFT;
+        mapOfOrkanen[y][96].checkpoint = A331_OUTISDE_LEFT;
         mapOfOrkanen[y][96].doorFlag = NO_DOOR;
     }
 
@@ -139,7 +139,7 @@ void setupDoors() {
 
     // VänsterKorridorUpp
     for (int x = 51; x <= 59; x++) {
-        mapOfOrkanen[42][x].checkpoint = LEFT_CORRIDOR_UP;
+        mapOfOrkanen[42][x].checkpoint = LEFT_CORRIDOR_DOWN;
         mapOfOrkanen[42][x].doorFlag = NO_DOOR;
     }
 
