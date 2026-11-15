@@ -4,14 +4,18 @@
 #include "Map.h"
 #include <stdint.h>
 #include <queue>
+#include <algorithm>
+#include <cstdlib>
 
 
 const int mapCells = mapWidth * mapHeight;
 const uint16_t INF = UINT16_MAX; 
 
 static uint16_t g_cost[mapCells];
-static uint16_t cameFrom[mapCells];
+static uint8_t cameFrom[mapCells];
 static bool visited[mapCells];
+
+const uint8_t NO_PARENT = 255;
 
 static const int dx[4] = {0, 1, 0, -1};
 static const int dy[4] = {1, 0, -1, 0};
@@ -34,32 +38,29 @@ static int getY(int index) {
     return index / mapWidth;
 }
 
-static bool AvailableExit(int x, int y, exitChoice exitChoice) {
+static bool AvailableExit(int x, int y, exitChoice choice) {
 
     bool exitA = (x == 40 && y == 58);
     bool exitB = (x == 178 && y == 53);
 
-    if (exitChoice == LEFT_EXIT) {
-        return exitA;
-    } else if (exitChoice == RIGHT_EXIT) {
-        return exitB;
-    } else if (exitChoice == BOTH_EXIT) {
-
-        int exitADistance = abs(x - 40) + abs(y - 58);
-        int exitBDistance = abs(x - 178) + abs(y - 53);
-
-        if (exitADistance < exitBDistance) {
+    switch(choice) {
+        case LEFT_EXIT:
             return exitA;
-        } else if (exitBDistance < exitADistance) {
+
+        case RIGHT_EXIT:
             return exitB;
-        } else {
+
+        case BOTH_EXIT:
             return exitA || exitB;
-        }
+
+        default:
+            return false;
     }
+
 
 }
 
-static bool Reachable(int x, int y, exitChoice exitChoice) {
+static bool Reachable(int x, int y, exitChoice choice) {
     if (!(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight)) {
         return false;
     }
@@ -69,8 +70,7 @@ static bool Reachable(int x, int y, exitChoice exitChoice) {
         return false;
     }
     if (p.tileType == EXIT) {
-        AvailableExit(x, y, exitChoice);
-        return true;
+        return AvailableExit(x, y, choice);
     }
     return true;
 
@@ -89,12 +89,12 @@ static uint16_t heuristic(int x, int y, exitChoice choice) {
 
     if(choice == LEFT_EXIT or choice == BOTH_EXIT) {
         uint16_t d = abs(x - 40) + abs(y - 58);
-        best = min(best,d);
+        best = std::min(best,d);
     }
 
     if (choice == RIGHT_EXIT or choice == BOTH_EXIT) {
         uint16_t d = abs(x - 178) + abs(y - 53);
-        best = min(best,d);
+        best = std::min(best,d);
     }
 
     return best;
@@ -120,7 +120,7 @@ bool Astar(
 
     for (int i = 0; i < mapCells; i++) {
         g_cost[i] = INF;
-        cameFrom[i] = NO_CHECKPOINT;
+        cameFrom[i] = NO_PARENT;
         visited[i] = false;
     }
 
@@ -135,10 +135,11 @@ bool Astar(
        g_cost[startIndex] = 0;
 
        openQueue.push({
-        heuristic(startX, startY, exitChoice),
-        0,
-        (uint16_t)startIndex
-       });
+            heuristic(startX, startY, exitChoice),
+            0,
+            (uint16_t)startIndex
+        }
+        );
 
        int target = -1;
 
@@ -214,7 +215,7 @@ bool Astar(
             
             uint8_t direction = cameFrom[current];
 
-            if(direction == NO_CHECKPOINT) {
+            if(direction == NO_PARENT) {
                 path.clear();
                 return false;
             }
