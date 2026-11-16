@@ -40,6 +40,8 @@ void setupMap() {
     setupStairs();
     setupExits();
     setupWalls();
+
+    Serial.println("Kartan är uppsatt");
 }
 
 void setupRoomsAndCorridors() {
@@ -148,7 +150,7 @@ void setupDoors() {
         mapOfOrkanen[y][164].checkpoint = RIGHT_STAIRS;
         mapOfOrkanen[y][164].doorFlag = NO_DOOR;
     }
-
+    Serial.println("Dörrar skapade");
 }
 
 void setupExits() {
@@ -158,6 +160,7 @@ void setupExits() {
 
     //Utgång B, Höger
     setTile(178, 53, EXIT);
+    Serial.println("Utgångar skapade");
 }
 
 void setupStairs() {
@@ -175,6 +178,7 @@ void setupStairs() {
             setTile(x, y, STAIRS);
         }
     }
+    Serial.println("Trappor skapade");
 }
 
 void setupWalls() {
@@ -351,34 +355,50 @@ void setupWalls() {
             setTile(x, 54, WALL);
         
     }
+    Serial.println("Satt ut väggar");
 }
 
 void blockDoor(CheckpointType checkpt) {
+
+    bool blocked = false;
 
     for (int x = 0; x < mapWidth; x++) {
 
         for (int y = 0; y < mapHeight; y++) {
 
             if (mapOfOrkanen[y][x].checkpoint == checkpt) {
-
+                blocked = true;
                 mapOfOrkanen[y][x].doorFlag = DOOR_CLOSED;
             }
         }
+    }
+    if (blocked) {
+        Serial.println("Dörr blockerad för checkpoint: " + checkpt);
+    } else {
+        Serial.println("Dörren finns inte, kan inte blockera");
     }
 }
 
 void openDoor(CheckpointType checkpt) {
 
+    bool open = false;
+
     for (int x = 0; x < mapWidth; x++) {
 
         for (int y = 0; y < mapHeight; y++) {
 
             if (mapOfOrkanen[y][x].checkpoint == checkpt) {
-
+                open = true;
                 mapOfOrkanen[y][x].doorFlag = DOOR_OPEN;
             }
         }
     }
+    if (open) {
+        Serial.println("Dörr är öppen för checkpoint: " + checkpt);
+    } else {
+        Serial.println("Dörren finns inte, kan inte öppna");
+    }
+    
 }
 
 bool isBlocked(int x, int y) {
