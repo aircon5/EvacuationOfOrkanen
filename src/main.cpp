@@ -9,6 +9,8 @@
 
 String test;
 exitChoice exitA;
+std::vector<int> way;
+std::vector<CheckpointType> nodCheckpoints;
 
 void setup() {
     Serial.begin(115200);
@@ -17,7 +19,7 @@ void setup() {
 
     setupMap();
     test = setupNode(128, 70);
-    // Astar(128, 78, exitA, );
+    Astar(xcoord, ycoord, exitA, way, nodCheckpoints);
 }
 
 
