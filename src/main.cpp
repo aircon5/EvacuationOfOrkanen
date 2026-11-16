@@ -4,12 +4,11 @@
 #include <Arduino.h>
 #include <unordered_map>
 #include <string>
-
+#include <vector>
+#include "stdint.h"
 
 String test;
-
-
-
+exitChoice exitA;
 
 void setup() {
     Serial.begin(115200);
@@ -17,8 +16,8 @@ void setup() {
     delay(1000);
 
     setupMap();
-    //test = setupNode(128, 70);
-    
+    test = setupNode(128, 70);
+    // Astar(128, 78, exitA, );
 }
 
 

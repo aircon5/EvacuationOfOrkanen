@@ -101,7 +101,7 @@ static uint16_t heuristic(int x, int y, exitChoice choice) {
 }
 
 
-bool Astar(
+void Astar(
     int startX,
     int startY,
     exitChoice exitChoice,
@@ -115,7 +115,7 @@ bool Astar(
     //Checkar om startvärden och mål är tillgängliga eller innanför kartan
     if (!Reachable(startX, startY, exitChoice)) {
         Serial.println("Koordinater utanför kartan eller oåtkomliga.");
-        return false;
+        return;
     }
 
     for (int i = 0; i < mapCells; i++) {
@@ -204,7 +204,7 @@ bool Astar(
        }
 
        if (target == -1) {
-           return false;
+           return;
        }
 
        int current = target;
@@ -217,7 +217,7 @@ bool Astar(
 
             if(direction == NO_PARENT) {
                 path.clear();
-                return false;
+                return;
             }
 
             int x = getX(current);
@@ -254,5 +254,5 @@ bool Astar(
         }
     }
     
-    return true;
+    return;
 }

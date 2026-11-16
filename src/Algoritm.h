@@ -11,7 +11,7 @@ enum exitChoice : uint8_t {
     BOTH_EXIT
 };
 
-bool Astar(
+void Astar(
     int startX,
     int startY,
     exitChoice exitChoice,

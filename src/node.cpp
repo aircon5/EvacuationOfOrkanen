@@ -41,7 +41,7 @@ std::unordered_map<int16_t, String> locations =
     {160061, "korridorMotTrappaHöger"},
     {99071, "framförA331"},
     {128070, "framförA332"},
-    {741006, "dörrMellanA330oA331"},
+    {74106, "dörrMellanA330oA331"},
     {153070, "framförA333"},
     {58080, "korridor"},
     {25060, "vån2TrappaVänster"},
@@ -166,11 +166,15 @@ void setupCheckpt(int ID) {
         break;
 
     default:
-        Serial.print("Dessa koordinater/ID finns inte");
+        Serial.print("Dessa koordinater/ID finns inte: " + String(ID)); 
         break;
     }
-    
-
+    Serial.println("Node ID: " + String(ID));
+    Serial.print("Checkpoints: ");
+    for (int i = 0; i < nearbyCheckpts.size(); i++) {
+        Serial.print(nearbyCheckpts[i].checkpt);
+        Serial.print(", " + nearbyCheckpts[i].direction + "| ");
+    }
 }
 
 String getCheckptDirection(CheckpointType checkpoint) {
