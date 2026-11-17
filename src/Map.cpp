@@ -1,6 +1,98 @@
 #include "Map.h"
 #include <Arduino.h>    
 
+struct Rec {
+    uint8_t x1;
+    uint8_t x2;
+    uint8_t y1;
+    uint8_t y2;
+    uint8_t val;
+};
+
+static const Rec tileMap[] PROGMEM {
+    //RUMMEN
+    {40, 72, 82, 110, ROOM}, //RUM A
+    {76, 105, 82, 110, ROOM}, //RUM B
+    {107, 140, 78, 110, ROOM}, //RUM C
+    {142, 166, 78, 110, ROOM}, //RUM D
+
+    //TRAPPOR
+    {38, 49, 42, 60, STAIRS}, //Vänster trappa
+    {165, 180, 49, 60, STAIRS}, //Höger trappa
+
+    //EXITS
+    {40, 40, 58, 58, EXIT}, //Vänstra utgången
+    {178, 178, 53, 53, EXIT}, //Högra utgången
+
+    //VÄGGAR
+      {39, 167, 111, 112, WALL},
+    {167, 167, 78, 110, WALL},
+    {141, 141, 78, 110, WALL},
+    {106, 106, 78, 110, WALL},
+    {106, 167, 77, 77, WALL},
+    {104, 105, 78, 78, WALL},
+    {94, 96, 78, 78, WALL},
+    {86, 95, 79, 79, WALL},
+    {79, 88, 80, 80, WALL},
+    {76, 81, 81, 81, WALL},
+    {74, 75, 82, 110, WALL},
+    {47, 75, 81, 81, WALL},
+    {39, 39, 81, 81, WALL},
+    {39, 39, 65, 110, WALL},
+    {39, 45, 62, 64, WALL},
+    {60, 60, 25, 74, WALL},
+    {50, 50, 42, 60, WALL},
+    {44, 44, 42, 55, WALL},
+    {37, 50, 61, 61, WALL},
+    {37, 37, 25, 60, WALL},
+    {37, 60, 24, 24, WALL},
+    {38, 44, 41, 41, WALL},
+    {60, 80, 74, 74, WALL},
+    {79, 84, 73, 73, WALL},
+    {82, 87, 72, 72, WALL},
+    {86, 91, 71, 71, WALL},
+    {91, 95, 70, 70, WALL},
+    {95, 97, 69, 69, WALL},
+    {61, 97, 61, 61, WALL},
+    {73, 73, 62, 73, WALL},
+    {98, 155, 61, 61, WALL},
+    {164, 181, 61, 61, WALL},
+    {180, 181, 62, 81, WALL},
+    {167, 181, 81, 81, WALL},
+    {154, 155, 25, 60, WALL},
+    {167, 181, 24, 24, WALL},
+    {180, 181, 25, 47, WALL},
+    {164, 181, 48, 48, WALL},
+    {181, 181, 49, 60, WALL},
+    {164, 164, 55, 60, WALL},
+    {164, 174, 54, 54, WALL}
+};
+
+struct checkptRec {
+    uint8_t x1;
+    uint8_t x2;
+    uint8_t y1;
+    uint8_t y2;
+    uint8_t checkpoint;
+};
+
+static const checkptRec checkptMap[] PROGMEM = {
+    {74, 75, 105, 108, GEM_LABB_DOOR},
+    {41, 46, 81, 81, LABB_A330},
+    {97, 103, 78, 78, LABB_A331},
+    {127, 132, 77, 77, SAL_A332},
+    {153, 158, 77, 77, SAL_A333},
+    {51, 59, 61, 61, A330_OUTSIDE_DOWN},
+    {60, 60, 75, 80, A330_OUTSIDE_RIGHT},
+    {156, 163, 61, 61, A333_DOWN},
+    {96, 96, 70, 77, A331_OUTISDE_LEFT},
+    {45, 49, 42, 42, LEFT_STAIRS},
+    {51, 59, 42, 42, LEFT_CORRIDOR_DOWN},
+    {164, 164, 49, 53, RIGHT_STAIRS}
+};
+//Detta ovanför kommer jag vidare utveckla, då detta ska vara kartan fast på flash memory istället för RAM
+
+
 Patch mapOfOrkanen[mapHeight][mapWidth];
 
 bool validCoord(int x, int y) {
@@ -88,6 +180,7 @@ void setupDoors() {
 
     //Labb A dörr
      for (int x = 41; x <= 46; x++) {
+           mapOfOrkanen[81][x].checkpoint = LABB_A330;
            mapOfOrkanen[81][x].doorFlag = DOOR_OPEN;
         }
 
