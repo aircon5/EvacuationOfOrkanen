@@ -12,8 +12,28 @@ const int mapCells = mapWidth * mapHeight;
 const uint16_t INF = UINT16_MAX; 
 
 static uint16_t g_cost[mapCells];
-static uint8_t cameFrom[mapCells];
-static bool visited[mapCells];
+static uint8_t cameFromPacked[(mapCells + 3) / 4];
+//static bool visited[mapCells];
+
+static void setDirection(int index, uint8_t direction) {
+
+    int byteIndex = index / 4;
+    int bitOffset = (index % 4) * 2;
+
+    cameFromPacked[byteIndex] &= ~(0x03 << bitOffset);
+
+    cameFromPacked[byteIndex] |=
+        (direction & 0x03) << bitOffset;
+}
+
+
+static uint8_t getDirection(int index) {
+
+    int byteIndex = index / 4;
+    int bitOffset = (index % 4) * 2;
+
+    return (cameFromPacked[byteIndex] >> bitOffset) & 0x03;
+}
 
 const uint8_t NO_PARENT = 255;
 
@@ -21,7 +41,7 @@ static const int dx[4] = {0, 1, 0, -1};
 static const int dy[4] = {1, 0, -1, 0};
 
 struct QueueHandle {
-    uint32_t f;
+    uint16_t f;
     uint16_t g;
     uint16_t index;
 };
@@ -120,8 +140,8 @@ void Astar(
 
     for (int i = 0; i < mapCells; i++) {
         g_cost[i] = INF;
-        cameFrom[i] = NO_PARENT;
-        visited[i] = false;
+        //cameFrom[i] = NO_PARENT;
+        //visited[i] = false;
     }
 
     std::priority_queue<
@@ -153,13 +173,14 @@ void Astar(
             if (currentNode.g != g_cost[current]) {
                 continue;
             }
-
+/*
             if (visited[current]) {
                 continue;
             }
+                
 
             visited[current] = true;
-
+*/
             int x = getX(current);
             int y = getY(current);
 
@@ -179,10 +200,11 @@ void Astar(
                     }
 
                     int neighbor = toIndex(nX, nY);
-
+/*
                     if (visited[neighbor]) {
                         continue;
                     }
+                        */
 
                     uint16_t newCost = g_cost[current] + 1;
 
@@ -190,9 +212,9 @@ void Astar(
 
                         g_cost[neighbor] = newCost;
 
-                        cameFrom[neighbor] = (d + 2) % 4;
+                        setDirection(neighbor,(d + 2) % 4);
 
-                        uint32_t f = newCost + heuristic(nX, nY, exitChoice);
+                        uint16_t f = newCost + heuristic(nX, nY, exitChoice);
 
                         openQueue.push({
                             f,
@@ -213,7 +235,7 @@ void Astar(
 
             path.push_back(current);
             
-            uint8_t direction = cameFrom[current];
+            uint8_t direction = getDirection(current);
 
             if(direction == NO_PARENT) {
                 path.clear();

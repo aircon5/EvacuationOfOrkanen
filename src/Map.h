@@ -2,8 +2,8 @@
 #define MAP_H
 #include <Arduino.h>
 
-const int mapWidth = 220;
-const int mapHeight = 120;
+const int mapWidth = 182;
+const int mapHeight = 113;
 
 //Tile typer
 enum TileType : uint8_t {
