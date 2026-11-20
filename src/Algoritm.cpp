@@ -84,7 +84,7 @@ static bool Reachable(int x, int y, exitChoice choice) {
     if (!(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight)) {
         return false;
     }
-    Patch& p = mapOfOrkanen[y][x];
+    Patch p = getPatch(x,y);
 
     if (p.tileType == WALL or p.doorFlag == DOOR_CLOSED) {
         return false;
@@ -184,7 +184,9 @@ void Astar(
             int x = getX(current);
             int y = getY(current);
 
-            if (mapOfOrkanen[y][x].tileType == EXIT && AvailableExit(x,y,exitChoice)) {
+            Patch p = getPatch(x,y);
+
+            if (p.tileType == EXIT && AvailableExit(x,y,exitChoice)) {
 
                 target = current;
                 break;
@@ -261,7 +263,9 @@ void Astar(
         int x = getX(index);
         int y = getY(index);
 
-        CheckpointType checkpt = (CheckpointType)mapOfOrkanen[y][x].checkpoint;
+        Patch p = getPatch(x,y);
+
+        CheckpointType checkpt = (CheckpointType)p.checkpoint;
 
         if (checkpt != NO_CHECKPOINT) {
 
