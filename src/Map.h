@@ -2,8 +2,10 @@
 #define MAP_H
 #include <Arduino.h>
 
-const int mapWidth = 182;
-const int mapHeight = 113;
+const int mapWidth = 182; //182
+const int mapHeight = 113; //113
+
+
 
 //Tile typer
 enum TileType : uint8_t {
@@ -46,7 +48,30 @@ struct Patch {
     uint8_t doorFlag;
 }; 
 
-extern Patch mapOfOrkanen[mapHeight][mapWidth]; // mapHeight är y koordinaten och är mindre än x vilket betyder mindre minne används.
+struct Rec {
+    uint8_t x1;
+    uint8_t x2;
+    uint8_t y1;
+    uint8_t y2;
+    uint8_t val;
+};
+
+struct checkptRec {
+    uint8_t x1;
+    uint8_t x2;
+    uint8_t y1;
+    uint8_t y2;
+    uint8_t checkpoint;
+};
+
+struct doorState {
+    CheckpointType checkpoint;
+    DoorFlag status;
+};
+
+Patch getPatch(int x, int y);
+
+//extern Patch mapOfOrkanen[mapHeight][mapWidth]; // mapHeight är y koordinaten och är mindre än x vilket betyder mindre minne används.
 
 //Skapar hela världen med default värden för varje tile/patch
 void setupWorld();
