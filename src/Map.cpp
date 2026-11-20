@@ -1,13 +1,7 @@
 #include "Map.h"
-#include <Arduino.h>    
+#include <Arduino.h>  
 
-struct Rec {
-    uint8_t x1;
-    uint8_t x2;
-    uint8_t y1;
-    uint8_t y2;
-    uint8_t val;
-};
+
 
 static const Rec tileMap[] PROGMEM {
     //RUMMEN
@@ -25,7 +19,7 @@ static const Rec tileMap[] PROGMEM {
     {178, 178, 53, 53, EXIT}, //Högra utgången
 
     //VÄGGAR
-      {39, 167, 111, 112, WALL},
+    {39, 167, 111, 112, WALL},
     {167, 167, 78, 110, WALL},
     {141, 141, 78, 110, WALL},
     {106, 106, 78, 110, WALL},
@@ -68,13 +62,7 @@ static const Rec tileMap[] PROGMEM {
     {164, 174, 54, 54, WALL}
 };
 
-struct checkptRec {
-    uint8_t x1;
-    uint8_t x2;
-    uint8_t y1;
-    uint8_t y2;
-    uint8_t checkpoint;
-};
+
 
 static const checkptRec checkptMap[] PROGMEM = {
     {74, 75, 105, 108, GEM_LABB_DOOR},
@@ -90,10 +78,54 @@ static const checkptRec checkptMap[] PROGMEM = {
     {51, 59, 42, 42, LEFT_CORRIDOR_DOWN},
     {164, 164, 49, 53, RIGHT_STAIRS}
 };
+
+static doorState doorStatus[] = {
+    {GEM_LABB_DOOR, DOOR_OPEN},
+    {LABB_A330, DOOR_OPEN},
+    {LABB_A331, DOOR_OPEN},
+    {SAL_A332, DOOR_OPEN},
+    {SAL_A333, DOOR_OPEN},
+    {A330_OUTSIDE_DOWN, DOOR_OPEN},
+    {A333_DOWN, DOOR_OPEN}
+};
 //Detta ovanför kommer jag vidare utveckla, då detta ska vara kartan fast på flash memory istället för RAM
 
 
-Patch mapOfOrkanen[mapHeight][mapWidth];
+Patch getPatch(int x, int y) {
+
+    Patch p = {FLOOR, NO_CHECKPOINT, NO_DOOR};
+
+    if(!validCoord(x,y)) {
+        p.tileType = WALL;
+        return p;
+    }
+
+    for (size_t i = 0; i < sizeof(tileMap) / sizeof(tileMap[0]); i++) {
+
+        const Rec& r = tileMap[i];
+
+        if (x >= r.x1 && x <= r.x2 && y >= r.y1 && y <= r.y2) {
+            p.tileType = r.val;
+        }
+
+    }
+
+    for (size_t i = 0; i < sizeof(checkptMap) / sizeof(checkptMap[0]); i++) {
+
+        const checkptRec& c = checkptMap[i];
+
+        if (x >= c.x1 && x <= c.x2 && y >= c.y1 && y <= c.y2) {
+            p.checkpoint = c.checkpoint;
+        }
+    }
+
+    return p;
+
+
+}
+
+
+//Patch mapOfOrkanen[mapHeight][mapWidth];
 
 bool validCoord(int x, int y) {
     if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight) {
@@ -102,6 +134,26 @@ bool validCoord(int x, int y) {
     }
     return true;
 }
+
+
+void setupMap() {
+    /*
+    setupWorld();
+    setupRoomsAndCorridors();
+    setupDoors();
+    setupStairs();
+    setupExits();
+    setupWalls();
+    */
+
+    for (size_t i = 0; i < sizeof(doorStatus) / sizeof(doorStatus[0]); i++) {
+        doorStatus[i].status = DOOR_OPEN; //Detta är egentligen bara en door reset
+    }
+
+    Serial.println("Kartan är uppsatt");
+}
+
+/*
 
 void setTile(int x, int y, TileType type) {
     if (validCoord(x, y)) {
@@ -123,17 +175,6 @@ void setupWorld() {
             mapOfOrkanen[y][x].doorFlag = NO_DOOR;
         }
     }
-}
-
-void setupMap() {
-    setupWorld();
-    setupRoomsAndCorridors();
-    setupDoors();
-    setupStairs();
-    setupExits();
-    setupWalls();
-
-    Serial.println("Kartan är uppsatt");
 }
 
 void setupRoomsAndCorridors() {
@@ -450,53 +491,46 @@ void setupWalls() {
     }
     Serial.println("Satt ut väggar");
 }
-
+*/
 void blockDoor(CheckpointType checkpt) {
 
-    bool blocked = false;
+    for (size_t i = 0; i < sizeof(doorStatus) / sizeof(doorStatus[0]); i++) {
 
-    for (int x = 0; x < mapWidth; x++) {
+        if (doorStatus[i].checkpoint == checkpt) {
 
-        for (int y = 0; y < mapHeight; y++) {
-
-            if (mapOfOrkanen[y][x].checkpoint == checkpt) {
-                blocked = true;
-                mapOfOrkanen[y][x].doorFlag = DOOR_CLOSED;
-            }
+            doorStatus[i].status = DOOR_CLOSED;
+            Serial.println("Dörr blockerad för checkpoint: " + checkpt);
+            return;
+             
         }
     }
-    if (blocked) {
-        Serial.println("Dörr blockerad för checkpoint: " + checkpt);
-    } else {
-        Serial.println("Dörren finns inte, kan inte blockera");
-    }
+
+    Serial.println("Dörren finns inte, kan inte blockera");
 }
 
 void openDoor(CheckpointType checkpt) {
 
-    bool open = false;
+    for (size_t i = 0; i < sizeof(doorStatus) / sizeof(doorStatus[0]); i++) {
 
-    for (int x = 0; x < mapWidth; x++) {
+        if (doorStatus[i].checkpoint == checkpt) {
 
-        for (int y = 0; y < mapHeight; y++) {
-
-            if (mapOfOrkanen[y][x].checkpoint == checkpt) {
-                open = true;
-                mapOfOrkanen[y][x].doorFlag = DOOR_OPEN;
-            }
+            doorStatus[i].status = DOOR_OPEN;
+            Serial.println("Dörr är öppen för checkpoint: " + checkpt);
+            return;
+             
         }
     }
-    if (open) {
-        Serial.println("Dörr är öppen för checkpoint: " + checkpt);
-    } else {
-        Serial.println("Dörren finns inte, kan inte öppna");
-    }
+    
+    Serial.println("Dörren finns inte, kan inte öppna");
     
 }
 
 bool isBlocked(int x, int y) {
-    if (!validCoord(x, y) or mapOfOrkanen[y][x].tileType == WALL or mapOfOrkanen[y][x].doorFlag == DOOR_CLOSED) {
+    Patch p = getPatch(x,y);
+
+    if(p.tileType == WALL || p.tileType == DOOR_CLOSED) {
+        Serial.println("Patchen är blockerad");
         return true;
     }
-    return false;
+    else return false;
 }
